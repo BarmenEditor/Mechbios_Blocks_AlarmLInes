@@ -12,7 +12,7 @@ unsigned long dataout[ARRAY_STRING_SIZE][STRING_SIZE];
 
 void Init(void)
 {
-  short i;
+  unsigned short i;
   for(i=0;i<ARRAY_STRING_SIZE;i++)
     {
       (&v->String0)[i] = (long)&dataout[i];
