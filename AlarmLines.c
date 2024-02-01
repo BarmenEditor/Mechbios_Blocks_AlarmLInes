@@ -4,6 +4,7 @@
 #define HEX_INTERPRETER 16777216
 #define SYMBOL_SHIFT 256
 #define BREAK_LINE_SYMBOL 127
+#define EMPTY_SYMBOL 32
 #define ARRAY_STRING_SIZE 16
 #define STRING_SIZE 4
 
@@ -39,7 +40,7 @@ void Exec(void)
         {
         if(DataInter[i]!=BREAK_LINE_SYMBOL)
            {
-             DataOut[numExit][DataCont]+=(DataInter[i]*hexator)+(-32*hexator);
+             DataOut[numExit][DataCont]+=(DataInter[i]*hexator)+(-EMPTY_SYMBOL*hexator);
            }
         if ((hexator!=1) && (DataInter[i]!=BREAK_LINE_SYMBOL))
            {
@@ -57,7 +58,7 @@ void Exec(void)
                {
                  for(z=i;z>j;z--)
                   {
-                   DataOut[numExit][DataCont]+=(-DataInter[z]*hexator)+(32*hexator);
+                   DataOut[numExit][DataCont]+=(-DataInter[z]*hexator)+(EMPTY_SYMBOL*hexator);
                    if(hexator==HEX_INTERPRETER)
                     {
                      hexator=1;DataCont--;
