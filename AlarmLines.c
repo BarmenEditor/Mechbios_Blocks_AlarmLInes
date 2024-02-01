@@ -36,7 +36,7 @@ void Exec(void)
    {
     for(i=0;i<*v->AlphabetCount;i++)
      {
-      if (bintrans % 2 == 1 && i-j<((4*STRING_SIZE)-1))
+      if (bintrans % 2 == 1 && i-j<((4*STRING_SIZE)-1) && (numExit < ARRAY_STRING_SIZE))
         {
         if(DataInter[i]!=BREAK_LINE_SYMBOL)
            {
