@@ -16,7 +16,6 @@ void Init(void)
     {
       (&v->String0)[i] = (long)&DataOut[i];
     }
-
 }
 
 
@@ -36,7 +35,7 @@ void Exec(void)
    {
     for(i=0;i<*v->AlphabetCount;i++)
      {
-      if (bintrans % 2 == 1 && i-j<15)
+      if (bintrans % 2 == 1 && i-j<((4*STRING_SIZE)-1))
         {
         if(DataInter[i]!=BREAK_LINE_SYMBOL)
            {
@@ -48,7 +47,7 @@ void Exec(void)
            }
         else
            {
-             if ((DataCont<3) && (DataInter[i]!=BREAK_LINE_SYMBOL))
+             if ((DataCont<(STRING_SIZE-1)) && (DataInter[i]!=BREAK_LINE_SYMBOL))
               {
                DataCont++;
               }
