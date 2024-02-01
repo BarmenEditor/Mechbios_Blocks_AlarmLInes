@@ -11,11 +11,11 @@ long DataOut[ARRAY_STRING_SIZE][STRING_SIZE];
 
 void Init(void)
 {
-short i;
-for(i=0;i<ARRAY_STRING_SIZE;i++)
-  {
-    (&v->String0)[i] = (long)&DataOut[i];
-  }
+  short i;
+  for(i=0;i<ARRAY_STRING_SIZE;i++)
+    {
+      (&v->String0)[i] = (long)&DataOut[i];
+    }
 
 }
 
