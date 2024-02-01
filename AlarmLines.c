@@ -8,97 +8,93 @@
 #define ARRAY_STRING_SIZE 16
 #define STRING_SIZE 4
 
-long DataOut[ARRAY_STRING_SIZE][STRING_SIZE];
+unsigned long dataout[ARRAY_STRING_SIZE][STRING_SIZE];
 
 void Init(void)
 {
   short i;
   for(i=0;i<ARRAY_STRING_SIZE;i++)
     {
-      (&v->String0)[i] = (long)&DataOut[i];
+      (&v->String0)[i] = (long)&dataout[i];
     }
 }
 
 
 void Exec(void)
 {
-  //short z,j=0,i,numExit=0, DataCont=0; // такой формат объявления переменных не
-
-  // а такой наоборот рекомендую, четко понятно что какого типа и чем проинициализировано в момент создания.
-  short z = 0; // Name'инг переменных должен отражать суть их использования. Переменные итераторы уместно называть i,j,k. 
-  short j = 0;
-  short i = 0;
-  short numExit = 0;
-  // Вопрос. Может ли быть переменная numExit отрицательной величины? 
-  // Я полагаю нет. В таком случае перепиши её на unsigned! И по такому же принципу оцени другие переменные!
-  short DataCont = 0;
-  // в названии переменных предлагаю использовать строчные буквы, как индикатор того, что это не "активные" объекты, функции же наоборот называть с заглавных
-  long bintrans=*v->MaskBin, hexator=HEX_INTERPRETER;
-  long *DataInter = (long *)*v->Alphabet;
+  unsigned short i=0;
+  unsigned short z=0;
+  unsigned short j=0;
+  unsigned short numberstringout=0;
+  unsigned short datastringcontainer=0;
+  unsigned long bintransformator=*v->MaskBin;
+  unsigned long hextransformator=HEX_INTERPRETER;
+  long *dataenter = (long *)*v->Alphabet;
   for (i=0;i<ARRAY_STRING_SIZE;i++)
     {
-    for (j=0;j<STRING_SIZE;j++)
+    for (z=0;z<STRING_SIZE;z++)
       {
-       DataOut[i][j]=EMPTY_SPACE;
+       dataout[i][z]=EMPTY_SPACE;
       }
      }
   if (*v->Alphabet)
    {
     for(i=0;i<*v->AlphabetCount;i++)
      {
-      if (bintrans % 2 == 1 && i-j<((4*STRING_SIZE)-1))
+      if (bintransformator % 2 == 1 && i-j<((4*STRING_SIZE)-1) && (numberstringout < ARRAY_STRING_SIZE))
         {
-        if(DataInter[i]!=BREAK_LINE_SYMBOL)
+        if(dataenter[i]!=BREAK_LINE_SYMBOL)
            {
-             DataOut[numExit][DataCont]+=(DataInter[i]*hexator)+(-EMPTY_SYMBOL*hexator);
+             dataout[numberstringout][datastringcontainer]+=(dataenter[i]*hextransformator)+(-EMPTY_SYMBOL*hextransformator);
            }
-        if ((hexator!=1) && (DataInter[i]!=BREAK_LINE_SYMBOL))
+        if ((hextransformator!=1) && (dataenter[i]!=BREAK_LINE_SYMBOL))
            {
-             hexator/=SYMBOL_SHIFT;
+             hextransformator/=SYMBOL_SHIFT;
            }
         else
            {
-             if ((DataCont<(STRING_SIZE-1)) && (DataInter[i]!=BREAK_LINE_SYMBOL))
+             if ((datastringcontainer<(STRING_SIZE-1)) && (dataenter[i]!=BREAK_LINE_SYMBOL))
               {
-               DataCont++;
+               datastringcontainer++;
               }
              else
               {
-               if(DataInter[i]!=BREAK_LINE_SYMBOL)
+               if(dataenter[i]!=BREAK_LINE_SYMBOL)
                {
                  for(z=i;z>j;z--)
                   {
-                   DataOut[numExit][DataCont]+=(-DataInter[z]*hexator)+(EMPTY_SYMBOL*hexator);
-                   if(hexator==HEX_INTERPRETER)
+                   dataout[numberstringout][datastringcontainer]+=(-dataenter[z]*hextransformator)+(EMPTY_SYMBOL*hextransformator);
+                   if(hextransformator==HEX_INTERPRETER)
                     {
-                     hexator=1;DataCont--;
+                     hextransformator=1;
+                     datastringcontainer--;
                     }
                     else
                     {
-                     hexator*=SYMBOL_SHIFT;
+                     hextransformator*=SYMBOL_SHIFT;
                     }
                    }
                i=j;
                }
-               DataCont=0;
-               numExit++;
+               datastringcontainer=0;
+               numberstringout++;
                }
-             hexator = HEX_INTERPRETER;
+             hextransformator = HEX_INTERPRETER;
            }
          }
-      if ((DataInter[i]== *v->BreakingPoint && j!=i) || (DataInter[i]==BREAK_LINE_SYMBOL))
+      if ((dataenter[i]== *v->BreakingPoint && j!=i) || (dataenter[i]==BREAK_LINE_SYMBOL))
         {
-         if(DataInter[i]!=BREAK_LINE_SYMBOL)
+         if(dataenter[i]!=BREAK_LINE_SYMBOL)
           {
-           if (bintrans % 2 == 1)
+           if (bintransformator % 2 == 1)
            {
-             bintrans=bintrans-1;
+             bintransformator=bintransformator-1;
            }
-           bintrans=bintrans/2;
+           bintransformator=bintransformator/2;
           }
          j=i;
         }
      }
    }
-   v->NumString =  numExit;
+   v->NumString =  numberstringout;
   }
