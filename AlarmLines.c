@@ -22,11 +22,11 @@ void Init(void)
 
 void Exec(void)
 {
-  unsigned short i=0;
-  unsigned short z=0;
-  unsigned short j=0;
-  unsigned short numberstringout=0;
-  unsigned short datastringcontainer=0;
+  unsigned short i=0; // Присутствует возможность зайти за диапазон char
+  unsigned char z=0;
+  unsigned short j=0; // Присутствует возможность зайти за диапазон char
+  unsigned char numberstringout=0;
+  unsigned char datastringcontainer=0;
   unsigned long bintransformator=*v->MaskBin;
   unsigned long hextransformator=HEX_INTERPRETER;
   long *dataenter = (long *)*v->Alphabet;
@@ -88,9 +88,9 @@ void Exec(void)
           {
            if (bintransformator % 2 == 1)
            {
-             bintransformator=bintransformator-1;
+             bintransformator--;
            }
-           bintransformator=bintransformator/2;
+           bintransformator/=2;
           }
          j=i;
         }
