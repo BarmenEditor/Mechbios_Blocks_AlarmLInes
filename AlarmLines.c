@@ -86,11 +86,7 @@ void Exec(void)
         {
          if(dataenter[i]!=BREAK_LINE_SYMBOL)
           {
-           if (bintransformator % 2 == 1)
-           {
-             bintransformator--;
-           }
-           bintransformator/=2;
+            bintransformator>>=1;
           }
          j=i;
         }
