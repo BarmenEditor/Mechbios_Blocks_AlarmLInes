@@ -22,9 +22,10 @@ void Init(void)
 
 void Exec(void)
 {
-  unsigned short i=0; // Присутствует возможность зайти за диапазон char
+  unsigned short i=0;
   unsigned char z=0;
-  unsigned short j=0; // Присутствует возможность зайти за диапазон char
+  unsigned short j=0;
+  unsigned char resshift=0;
   unsigned char numberstringout=0;
   unsigned char datastringcontainer=0;
   unsigned long bintransformator=*v->MaskBin;
@@ -86,7 +87,12 @@ void Exec(void)
         {
          if(dataenter[i]!=BREAK_LINE_SYMBOL)
           {
-            bintransformator>>=1;
+           bintransformator>>=1;
+             if (bintransformator==0)
+               {
+                bintransformator+=(((*v->MaskBinRes>>resshift)%2));
+                resshift++;
+               }
           }
          j=i;
         }
