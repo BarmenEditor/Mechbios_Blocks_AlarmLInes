@@ -3,92 +3,102 @@
 #define EMPTY_SPACE 538976288
 #define HEX_INTERPRETER 16777216
 #define SYMBOL_SHIFT 256
+#define SYMBOL_MASK 255
 #define BREAK_LINE_SYMBOL 127
 #define EMPTY_SYMBOL 32
-#define ARRAY_STRING_SIZE 16
+#define ARRAY_STRING_SIZE 64
 #define STRING_SIZE 4
 
-long DataOut[ARRAY_STRING_SIZE][STRING_SIZE];
+unsigned long dataout[ARRAY_STRING_SIZE][STRING_SIZE];
 
 void Init(void)
 {
-  short i;
+  unsigned short i;
   for(i=0;i<ARRAY_STRING_SIZE;i++)
     {
-      (&v->String0)[i] = (long)&DataOut[i];
+      (&v->String0)[i] = (long)&dataout[i];
     }
 }
 
 
 void Exec(void)
 {
-  short z,j=0,i,numExit=0, DataCont=0;
-  long bintrans=*v->MaskBin, hexator=HEX_INTERPRETER;
-  long *DataInter = (long *)*v->Alphabet;
+  unsigned short i;
+  unsigned char z;
+  unsigned short j=0;
+  unsigned char resshift=0;
+  unsigned char numberstringout=0;
+  unsigned char datastringcontainer=0;
+  unsigned long bintransformator=*v->MaskBin;
+  unsigned long hextransformator=HEX_INTERPRETER;
+  long *dataenter = (long *)*v->Alphabet;
   for (i=0;i<ARRAY_STRING_SIZE;i++)
     {
-    for (j=0;j<STRING_SIZE;j++)
+    for (z=0;z<STRING_SIZE;z++)
       {
-       DataOut[i][j]=EMPTY_SPACE;
+       dataout[i][z]=EMPTY_SPACE;
       }
      }
   if (*v->Alphabet)
    {
-    for(i=0;i<*v->AlphabetCount;i++)
+    for(i=0;i<(4*(*v->AlphabetCount));i++)
      {
-      if (bintrans % 2 == 1 && i-j<((4*STRING_SIZE)-1) && (numExit < ARRAY_STRING_SIZE))
+      if (bintransformator % 2 == 1 && i-j<((4*STRING_SIZE)-1) && (numberstringout < ARRAY_STRING_SIZE))
         {
-        if(DataInter[i]!=BREAK_LINE_SYMBOL)
+        if(dataenter[i]!=BREAK_LINE_SYMBOL)
            {
-             DataOut[numExit][DataCont]+=(DataInter[i]*hexator)+(-EMPTY_SYMBOL*hexator);
+             dataout[numberstringout][datastringcontainer]+=(((dataenter[i/4]>>(8*(i%4)))&SYMBOL_MASK)*hextransformator)+(-EMPTY_SYMBOL*hextransformator);
            }
-        if ((hexator!=1) && (DataInter[i]!=BREAK_LINE_SYMBOL))
+        if ((hextransformator!=1) && ((dataenter[i/4]>>(8*(i%4))&SYMBOL_MASK)!=BREAK_LINE_SYMBOL))
            {
-             hexator/=SYMBOL_SHIFT;
+             hextransformator/=SYMBOL_SHIFT;
            }
         else
            {
-             if ((DataCont<(STRING_SIZE-1)) && (DataInter[i]!=BREAK_LINE_SYMBOL))
+             if ((datastringcontainer<(STRING_SIZE-1)) && (((dataenter[i/4]>>(8*(i%4)))&SYMBOL_MASK)!=BREAK_LINE_SYMBOL))
               {
-               DataCont++;
+               datastringcontainer++;
               }
              else
               {
-               if(DataInter[i]!=BREAK_LINE_SYMBOL)
+               if(((dataenter[i/4]>>(8*(i%4)))&SYMBOL_MASK)!=BREAK_LINE_SYMBOL)
                {
                  for(z=i;z>j;z--)
                   {
-                   DataOut[numExit][DataCont]+=(-DataInter[z]*hexator)+(EMPTY_SYMBOL*hexator);
-                   if(hexator==HEX_INTERPRETER)
+                   dataout[numberstringout][datastringcontainer]+=(-((dataenter[z/4]>>(8*(z%4)))&SYMBOL_MASK)*hextransformator)+(EMPTY_SYMBOL*hextransformator);
+                   if(hextransformator==HEX_INTERPRETER)
                     {
-                     hexator=1;DataCont--;
+                     hextransformator=1;
+                     datastringcontainer--;
                     }
                     else
                     {
-                     hexator*=SYMBOL_SHIFT;
+                     hextransformator*=SYMBOL_SHIFT;
                     }
                    }
                i=j;
                }
-               DataCont=0;
-               numExit++;
+               datastringcontainer=0;
+               numberstringout++;
                }
-             hexator = HEX_INTERPRETER;
+             hextransformator = HEX_INTERPRETER;
            }
          }
-      if ((DataInter[i]== *v->BreakingPoint && j!=i) || (DataInter[i]==BREAK_LINE_SYMBOL))
+      if ((((dataenter[i/4]>>(8*(i%4)))&SYMBOL_MASK)== *v->BreakingPoint && j!=i) || (((dataenter[i/4]>>(8*(i%4)))&SYMBOL_MASK)==BREAK_LINE_SYMBOL))
         {
-         if(DataInter[i]!=BREAK_LINE_SYMBOL)
+         if(((dataenter[i/4]>>(8*(i%4)))&SYMBOL_MASK)!=BREAK_LINE_SYMBOL)
           {
-           if (bintrans % 2 == 1)
-           {
-             bintrans=bintrans-1;
-           }
-           bintrans=bintrans/2;
+           bintransformator>>=1;
+             if(resshift>29 && resshift<60)
+                  {
+                    bintransformator+=(((*v->MaskBinRes>>(resshift-30))%2));
+                  }
+                resshift++;
+
           }
          j=i;
         }
      }
    }
-   v->NumString =  numExit;
+   v->NumString =  numberstringout;
   }
