@@ -24,7 +24,7 @@ void Init(void)
 void Exec(void)
 {
   unsigned short i;
-  unsigned char z;
+  unsigned short z;
   unsigned short j=0;
   unsigned char resshift=0;
   unsigned char numberstringout=0;
